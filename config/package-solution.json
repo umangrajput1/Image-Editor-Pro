@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "photogallery-client-side-solution",
+    "id": "f1c713d3-3dd1-4810-a0f4-04633c0be7aa",
+    "version": "1.0.0.2",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "photogallery description"
+      },
+      "longDescription": {
+        "default": "photogallery description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "photogallery Feature",
+        "description": "The feature that activates elements of the photogallery solution.",
+        "id": "859f18a1-7f4e-4f16-b9ca-9a88e6b1d348",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/photogallery.sppkg"
+  }
+}
