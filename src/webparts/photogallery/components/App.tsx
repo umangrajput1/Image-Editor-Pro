@@ -21,16 +21,14 @@ const App: React.FC = () => {
     const num = parseInt(hex.slice(0, 12), 16);
     return num;
   }
-  const libraryName = "PublishingImages"; // Picture Library
-  const siteRelative = "/sites/GrueneWeltweit/Washington/webstudio"; // Site-relative URL
+  const libraryName = "PublishingImages"; 
+  const siteRelative = "/sites/GrueneWeltweit/Washington/webstudio"; 
 
   const fetchData = async () => {
     try {
-      // 1️⃣ Fetch folders from library
       const libraryRoot = web.getFolderByServerRelativeUrl(
         `${siteRelative}/${libraryName}`
       );
-
       const subFolders = await libraryRoot.folders
         .select("Name", "ServerRelativeUrl", "UniqueId")
         .get();
@@ -40,7 +38,6 @@ const App: React.FC = () => {
         .map((f: any) => ({ id: guidToNumber(f.UniqueId), name: f.Name }));
 
       setFolders(filteredFolders);
-      // Fetch list items
       const items = await web.lists
         .getById("8a54a424-5c8f-4106-af7f-f5bed7b23c9d")
         .items.select(
@@ -75,7 +72,6 @@ const App: React.FC = () => {
         }
       };
 
-      //Map images with folderId
       const mappedImages = items
         .map((item: any) => {
           const fileUrl = item.EncodedAbsUrl || item.FileRef;
@@ -99,8 +95,6 @@ const App: React.FC = () => {
       console.error("Data fetching error:", error);
     }
   };
-
-  // Fetch data on component mount
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -166,7 +160,7 @@ const App: React.FC = () => {
         console.error("Image src is not a base64 string.");
       }
 
-      handleCloseModal(); // Close modal after save
+      handleCloseModal(); 
     } catch (error) {
       console.error("Error saving image to SharePoint:", error);
     }
