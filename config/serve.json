@@ -2,6 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://smalsusinfolabs.sharepoint.com/sites/TSO/_layouts/15/workbench.aspx"
+  "initialPage": "https://grueneweltweit.sharepoint.com/sites/GrueneWeltweit/washington/webstudio/_layouts/15/workbench.aspx"
 
 }

@@ -126,7 +126,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 useEffect(() => {
   if (uploadMethod === "paste") {
     const handlePaste = (e: ClipboardEvent) => {
-      console.log("Paste event triggered");
 
       const items = e.clipboardData?.items;
       if (!items) return;
@@ -136,7 +135,6 @@ useEffect(() => {
         if (item.type.startsWith("image/")) {
           const file = item.getAsFile();
           if (file) {
-            console.log("Image pasted:", file);
             onImageUpload(file);
             break; // stop after first image
           }
@@ -146,11 +144,9 @@ useEffect(() => {
 
     // ✅ Attach listener to `window`
     window.addEventListener("paste", handlePaste);
-    console.log("Paste listener attached");
 
     return () => {
       window.removeEventListener("paste", handlePaste);
-      console.log("Paste listener removed");
     };
   }
 }, [uploadMethod, onImageUpload]);
@@ -180,9 +176,6 @@ useEffect(() => {
 
       if (!base64ImageBytes) {
         console.error("No image was generated or the response is undefined");
-      } else {
-        // Use base64ImageBytes safely
-        console.log(base64ImageBytes);
       }
 
       const res = await fetch(`data:image/png;base64,${base64ImageBytes}`);
