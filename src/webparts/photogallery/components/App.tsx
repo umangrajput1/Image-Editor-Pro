@@ -21,8 +21,8 @@ const App: React.FC = () => {
     const num = parseInt(hex.slice(0, 12), 16);
     return num;
   }
-  const libraryName = "PublishingImages"; 
-  const siteRelative = "/sites/GrueneWeltweit/Washington/webstudio"; 
+  const libraryName = "PublishingImages";
+  const siteRelative = "/sites/GrueneWeltweit/Washington/webstudio";
 
   const fetchData = async () => {
     try {
@@ -32,12 +32,12 @@ const App: React.FC = () => {
       const subFolders = await libraryRoot.folders
         .select("Name", "ServerRelativeUrl", "UniqueId")
         .get();
-
       const filteredFolders = subFolders
         .filter((f: any) => f.Name !== "Forms" && !f.Name.startsWith("_"))
         .map((f: any) => ({ id: guidToNumber(f.UniqueId), name: f.Name }));
 
       setFolders(filteredFolders);
+
       const items = await web.lists
         .getById("8a54a424-5c8f-4106-af7f-f5bed7b23c9d")
         .items.select(
@@ -48,7 +48,9 @@ const App: React.FC = () => {
           "EncodedAbsUrl",
           "ImageWidth",
           "ImageHeight",
-          "CopyrightInfo"
+          "CopyrightInfo",
+          "UniqueId",
+          "Modified"
         )
         .getAll();
 
@@ -56,8 +58,6 @@ const App: React.FC = () => {
         try {
           const url = new URL(fileUrl);
           const pathSegments = url.pathname.split("/").filter(Boolean);
-
-          // Look for a folder in the URL path that exists in filteredFolders
           for (let i = pathSegments.length - 2; i >= 0; i--) {
             const segment = decodeURIComponent(pathSegments[i]).toLowerCase();
             const folder = filteredFolders.find(
@@ -71,30 +71,37 @@ const App: React.FC = () => {
           return null;
         }
       };
-
       const mappedImages = items
         .map((item: any) => {
           const fileUrl = item.EncodedAbsUrl || item.FileRef;
           if (fileUrl && fileUrl.match(/\.(jpeg|jpg|png|gif|webp)$/i)) {
+            // Add version query to bust cache — use Modified date or UniqueId
+            const versionParam =
+              item.Modified || item.UniqueId || Date.now().toString();
+            const cacheBustedUrl = `${fileUrl}?v=${encodeURIComponent(
+              versionParam
+            )}`;
+
             return {
-              id: item.ID,
+              id: item.Id,
               folderId: getFolderId(fileUrl),
-              src: fileUrl,
+              src: cacheBustedUrl,
               name: item.FileLeafRef,
               title: item.Title || "",
               description: item.Description || "",
               copyright: item.CopyrightInfo || "",
+              UniqueId: item.UniqueId,
             };
           }
           return null;
         })
         .filter(Boolean);
-
       setImages(mappedImages);
     } catch (error) {
       console.error("Data fetching error:", error);
     }
   };
+
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -126,9 +133,8 @@ const App: React.FC = () => {
   };
 
   const handleSaveImage = async (
-    savedImage: Omit<Image, "id"> & { id?: number }
+    savedImage: Omit<Image, "id"> & { id?: number; UniqueId?: string }
   ) => {
-
     try {
       const folder = folders.find((f) => f.id === savedImage.folderId);
       if (!folder) {
@@ -137,30 +143,88 @@ const App: React.FC = () => {
       }
 
       const folderPath = `${siteRelative}/${libraryName}/${folder.name}`;
+      const list = web.lists.getById("8a54a424-5c8f-4106-af7f-f5bed7b23c9d");
 
-      if (savedImage.src.startsWith("data:image")) {
-        // Convert base64 to blob
-        const blob = base64ToBlob(savedImage.src);
-        const fileAddResult = await web
-          .getFolderByServerRelativeUrl(folderPath)
-          .files.add(savedImage.name, blob, true);
+      if (!savedImage.src.startsWith("data:image")) {
+        console.error("Image src is not a base64 string.");
+        return;
+      }
+      const blob = base64ToBlob(savedImage.src);
+      if (savedImage.id) {
+        try {
+          const existingItem = await list.items
+            .getById(Number(savedImage.id))
+            .select("Id", "FileRef", "FileLeafRef")
+            .get();
 
-        const serverRelativeUrl = fileAddResult.data.ServerRelativeUrl;
-        const file = web.getFileByServerRelativeUrl(serverRelativeUrl);
+          if (!existingItem || !existingItem.FileRef) {
+            console.warn("No existing item found for ID:", savedImage.id);
+            return;
+          }
+
+          const oldFileRef = existingItem.FileRef;
+          const oldFileName = existingItem.FileLeafRef;
+          const file = web.getFileByServerRelativeUrl(oldFileRef);
+
+          // Replace file content
+          await file.setContentChunked(blob);
+
+          // Rename file if needed
+          if (savedImage.name && savedImage.name !== oldFileName) {
+            const newFileUrl = `${folderPath}/${savedImage.name}`;
+            await file.moveTo(newFileUrl, 1);
+          }
+
+          // Update metadata
+          const updatedFile = web.getFileByServerRelativeUrl(
+            `${folderPath}/${savedImage.name || oldFileName}`
+          );
+          const item = await updatedFile.getItem();
+          await item.update({
+            Title: savedImage.title || "",
+            Description: savedImage.description || "",
+            CopyrightInfo: savedImage.copyright || "",
+            Modified: new Date().toISOString(),
+          });
+          await fetchData();
+        } catch (err) {
+          console.error("Error updating image:", err);
+        }
+      } else {
+        const folder = web.getFolderByServerRelativeUrl(folderPath);
+
+        const existingFiles = await folder.files
+          .filter(`Name eq '${savedImage.name}'`)
+          .select("Name")
+          .get();
+
+        let finalFileName = savedImage.name;
+
+        if (existingFiles.length > 0) {
+          const extension = savedImage.name.includes(".")
+            ? savedImage.name.substring(savedImage.name.lastIndexOf("."))
+            : "";
+          const baseName = savedImage.name.replace(extension, "");
+          finalFileName = `${baseName}_${Date.now()}${extension}`;
+        }
+        const fileAddResult = await folder.files.add(
+          finalFileName,
+          blob,
+          false
+        );
+
+        const file = fileAddResult.file;
         const listItem = await file.listItemAllFields.select("Id").get();
 
-        const list = web.lists.getById("8a54a424-5c8f-4106-af7f-f5bed7b23c9d");
         await list.items.getById(listItem.Id).update({
           Title: savedImage.title || "",
           Description: savedImage.description || "",
           CopyrightInfo: savedImage.copyright || "",
+          FileLeafRef: finalFileName, 
         });
-        await fetchData();
-      } else {
-        console.error("Image src is not a base64 string.");
       }
-
-      handleCloseModal(); 
+      await fetchData();
+      handleCloseModal();
     } catch (error) {
       console.error("Error saving image to SharePoint:", error);
     }
