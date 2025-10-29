@@ -6,7 +6,8 @@
       "components": [
         {
           "entrypoint": "./lib/webparts/photogallery/PhotogalleryWebPart.js",
-          "manifest": "./src/webparts/photogallery/PhotogalleryWebPart.manifest.json"
+          "manifest": "./src/webparts/photogallery/PhotogalleryWebPart.manifest.json",
+           "outputPath": "dist/photogallery.bundle.js"
         }
       ]
     }

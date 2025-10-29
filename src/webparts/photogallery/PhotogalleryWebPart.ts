@@ -12,10 +12,12 @@ import * as strings from 'PhotogalleryWebPartStrings';
 import pnp from 'sp-pnp-js';
 // import App from './components/App';
 // import Hello from './components/Hello';
-import App from './components/App';
+// import App from './components/App';
 import './components/custom.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// import Hello from './components/Hello';
+import App from './components/App';
 
 
 
@@ -25,16 +27,18 @@ export interface IPhotogalleryWebPartProps {
 
 export default class PhotogalleryWebPart extends BaseClientSideWebPart<IPhotogalleryWebPartProps> {
 
-   public render(): void {
-    const element: React.ReactElement = React.createElement(App);
- 
-    ReactDom.render(element, this.domElement);
-  }
+public render(): void {
+  const element: React.ReactElement = React.createElement(App, {
+    description: this.properties.description
+  } as any);
 
-    protected onInit(): Promise<void> {
-    return super.onInit().then(_ =>{
-     pnp.setup({
-      spfxContext: this.context
+  ReactDom.render(element, this.domElement);
+}
+
+protected onInit(): Promise<void> {
+  return super.onInit().then(_ =>{
+   pnp.setup({
+    spfxContext: this.context
     });
     });
   }
