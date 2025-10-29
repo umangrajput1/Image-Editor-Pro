@@ -27,7 +27,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, galleryTitle, onAdd
                                 <img src={image.src} className="card-img-top" alt={image.title} style={{ height: '250px', objectFit: 'cover' }} />
                                 <div className="card-body">
                                     <h5 className="card-title">{image.title || 'Untitled'}</h5>
-                                    <p className="card-text text-muted small">{image.description || 'No description.'}</p>
+                                    <p className="card-text text-muted small">{image.description || ''}</p>
                                 </div>
                                 <div className="card-footer bg-white border-top-0 pb-3">
                                      <button className="btn btn-outline-secondary w-100" onClick={() => onEditImage(image)}>

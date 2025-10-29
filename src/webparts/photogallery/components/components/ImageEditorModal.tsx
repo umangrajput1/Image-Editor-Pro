@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import ReactCrop, { centerCrop, makeAspectCrop, type Crop, PixelCrop } from 'react-image-crop';
+import ReactCrop, {type Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import ImageUploader from './ImageUploader';
 import { Image, Folder, FilterType, Dimensions } from '../types';
@@ -67,12 +67,13 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
     const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
         const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
         setDimensions({ width, height });
-        const initialCrop = centerCrop(
-          makeAspectCrop({ unit: '%', width: 90 }, 16 / 9, width, height),
-          width,
-          height
-        );
-        setCrop(initialCrop);
+        setCrop({
+            unit: '%',
+            width: 100,
+            height: 100,
+            x: 0,
+            y: 0,
+        });
         setCompletedCrop(undefined);
     }, []);
     
@@ -313,7 +314,6 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
                                                   crop={crop}
                                                   onChange={(_, percentCrop) => setCrop(percentCrop)}
                                                   onComplete={(c) => setCompletedCrop(c)}
-                                                  aspect={16 / 9}
                                                 >
                                                   <img
                                                     ref={imgRef}
