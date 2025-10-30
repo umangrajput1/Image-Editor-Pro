@@ -10,15 +10,10 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'PhotogalleryWebPartStrings';
 import pnp from 'sp-pnp-js';
-// import App from './components/App';
-// import Hello from './components/Hello';
-// import App from './components/App';
-// import './components/custom.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-// import Hello from './components/Hello';
 import App from './components/App';
-
+import './components/custom.css';
 
 
 export interface IPhotogalleryWebPartProps {

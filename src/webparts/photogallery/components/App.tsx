@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<any | null>(null);
   const [selectedFolderId, setSelectedFolderId] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
   const web = new Web(
     "https://grueneweltweit.sharepoint.com/sites/GrueneWeltweit/Washington/webstudio"
   );
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   const siteRelative = "/sites/GrueneWeltweit/Washington/webstudio";
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const libraryRoot = web.getFolderByServerRelativeUrl(
         `${siteRelative}/${libraryName}`
@@ -97,6 +99,7 @@ const App: React.FC = () => {
         })
         .filter(Boolean);
       setImages(mappedImages);
+      setLoading(false);
     } catch (error) {
       console.error("Data fetching error:", error);
     }
@@ -245,6 +248,17 @@ const App: React.FC = () => {
     if (selectedFolderId === 0) return "All Images";
     return folders.find((f) => f.id === selectedFolderId)?.name || "";
   }, [folders, selectedFolderId]);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading images...</p>
+      </div>
+    );
+  }
 
   return (
     <>

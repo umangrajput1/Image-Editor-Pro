@@ -193,13 +193,14 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
         <>
             <div className="modal-backdrop fade show"></div>
             <div className="modal addNewImageModal fade show" style={{ display: 'block' }} tabIndex={-1} role="dialog">
-                <div className="modal-dialog modal-fullscreen">
+                <div className="modal-dialog custom-modal-width modal-dialog-centered" role="document">
+
                     <div className="modal-content">
-                        <div className="modal-header">
+                        <div className="modal-header p-3">
                             <h5 className="modal-title">{imageToEdit ? `Editing: ${editedImage.title || editedImage.name}` : 'Add New Image'}</h5>
                             <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body addimg">
                             <div className="row g-4 h-100">
                                 {/* Left Column: Uploader & Controls */}
                                 <div className="col-lg-4 d-flex flex-column">
@@ -391,7 +392,7 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer p-3">
                             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
                             {imageToEdit && (
                                 <button type="button" className="btn btn-success" onClick={handleCopyAndSave} disabled={controlsDisabled}>
