@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useMemo } from "react";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import PhotoGallery from "./components/PhotoGallery";
 import ImageEditorModal from "./components/ImageEditorModal";
 import FolderList from "./components/FolderList";
@@ -248,7 +248,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <main className="container-fluid mt-4">
         <div className="row">
           <aside className="col-lg-3">
@@ -280,9 +280,7 @@ const App: React.FC = () => {
         />
       )}
 
-      <footer className="text-center text-muted py-4 mt-4">
-        <p>&copy; 2025 Photo Gallery. All Rights Reserved.</p>
-      </footer>
+    
     </>
   );
 };

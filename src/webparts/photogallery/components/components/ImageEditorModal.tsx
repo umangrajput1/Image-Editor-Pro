@@ -166,6 +166,25 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
         onSave(finalImage);
     };
 
+        const handleCopyAndSave = () => {
+        if (!editedImage.src || !previewCanvasRef.current) return;
+
+        applyEdits();
+        const finalImageSrc = previewCanvasRef.current.toDataURL('image/png');
+
+        // Create a new image object, but without the ID
+        const { id, ...imageWithoutId } = editedImage;
+
+        const finalImage: Omit<Image, 'id'> = {
+            ...imageWithoutId,
+            src: finalImageSrc || editedImage.src,
+            folderId: editedImage.folderId as number,
+            title: `${editedImage.title || 'Untitled'} (Copy)`, // Add (Copy) to title
+            name: `copy_of_${editedImage.name}`, // Add prefix to name
+        };
+        onSave(finalImage);
+    };
+
     if (!isOpen) return null;
     
     const controlsDisabled = !editedImage.src;
@@ -374,8 +393,13 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
-                            <button type="button" className="btn btn-primary" onClick={handleSave} disabled={controlsDisabled}>
-                                Save Changes
+                            {imageToEdit && (
+                                <button type="button" className="btn btn-success" onClick={handleCopyAndSave} disabled={controlsDisabled}>
+                                    <i className="bi bi-copy me-2"></i>Copy & Save as New
+                                </button>
+                            )}
+                            <button type="button" className="btn btn-success" onClick={handleSave} disabled={controlsDisabled}>
+                                {imageToEdit ? 'Save Changes' : 'Save Image'}
                             </button>
                         </div>
                     </div>
