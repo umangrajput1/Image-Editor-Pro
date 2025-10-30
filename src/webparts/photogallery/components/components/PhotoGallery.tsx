@@ -10,16 +10,19 @@ interface PhotoGalleryProps {
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, galleryTitle, onAddImage, onEditImage }) => {
     return (
-        <div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1 className="mb-0">
-                    Gallery: <span className="text-primary">{galleryTitle}</span>
-                </h1>
-                <button className="btn btn-success btn-lg" onClick={onAddImage}>
-                    <i className="bi bi-plus-circle-fill me-2"></i>Add New Image
-                </button>
-            </div>
-            <div className="row g-4">
+       <div className="d-flex flex-column h-100">
+            <div
+  className="d-flex justify-content-between align-items-center mb-1"
+  style={{ padding: '0' }}
+>
+  <h1 className="fs-5 mb-0 fw-semibold" style={{ lineHeight: '1.2' }}>
+    Gallery: <span className="text-success">{galleryTitle}</span>
+  </h1>
+  <button className="btn btn-success btn-lg d-flex align-items-center">
+    <i className="bi bi-plus-circle-fill me-2"></i>Add New Image
+  </button>
+</div>
+             <div className="row g-4 flex-grow-1" style={{ overflowY: 'auto' }}>
                 {images.length > 0 ? (
                     images.map(image => (
                         <div key={image.id} className="col-xl-4 col-md-6">

@@ -248,17 +248,18 @@ const App: React.FC = () => {
 
   return (
     <>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       {/* <Header /> */}
-      <main className="container-fluid mt-4">
-        <div className="row">
-          <aside className="col-lg-3">
+       <main className="container-fluid mt-4" style={{ flex: '1 1 auto', overflowY: 'hidden' }}>
+          <div className="row h-100">
+              <aside className="col-lg-3 h-100">
             <FolderList
               folders={folders}
               selectedFolderId={selectedFolderId}
               onSelectFolder={handleSelectFolder}
             />
           </aside>
-          <section className="col-lg-9">
+          <section className="col-lg-9 h-100">
             <PhotoGallery
               images={filteredImages}
               galleryTitle={selectedFolderName}
@@ -268,7 +269,7 @@ const App: React.FC = () => {
           </section>
         </div>
       </main>
-
+    </div>
       {isModalOpen && (
         <ImageEditorModal
           isOpen={isModalOpen}

@@ -9,11 +9,11 @@ interface FolderListProps {
 
 const FolderList: React.FC<FolderListProps> = ({ folders, selectedFolderId, onSelectFolder }) => {
     return (
-        <div className="card">
-            <div className="card-header">
+        <div className="card h-100 d-flex flex-column">
+            <div className="card-header flex-shrink-0">
                 <h5 className="mb-0">Folders</h5>
             </div>
-            <div className="list-group list-group-flush">
+             <div className="list-group list-group-flush" style={{ overflowY: 'auto' }}>
                  <button
                     type="button"
                     className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${selectedFolderId === 0 ? 'active' : ''}`}
