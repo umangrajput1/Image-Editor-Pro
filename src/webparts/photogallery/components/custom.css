@@ -67,3 +67,13 @@ div[data-automation-id="CanvasZone"] {
 .CanvasSection[data-automation-id="CanvasSection"] {
     padding: 0;
 }
+
+/********** addNewImageModal CSS  *****/
+.addNewImageModal .modal-dialog.modal-fullscreen {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.addNewImageModal .modal-dialog.modal-fullscreen .modal-content > .modal-header, .addNewImageModal .modal-dialog.modal-fullscreen .modal-content > .modal-body, .addNewImageModal .modal-dialog.modal-fullscreen .modal-content > .modal-header, .addNewImageModal .modal-dialog.modal-fullscreen .modal-content > .modal-footer {
+    padding: 15px;
+}

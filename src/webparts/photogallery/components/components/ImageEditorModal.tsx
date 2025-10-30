@@ -173,14 +173,14 @@ const ImageEditorModal: React.FC<ImageEditorModalProps> = ({ isOpen, onClose, on
     return (
         <>
             <div className="modal-backdrop fade show"></div>
-            <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} role="dialog">
+            <div className="modal addNewImageModal fade show" style={{ display: 'block' }} tabIndex={-1} role="dialog">
                 <div className="modal-dialog modal-fullscreen">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">{imageToEdit ? `Editing: ${editedImage.title || editedImage.name}` : 'Add New Image'}</h5>
                             <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
                         </div>
-                        <div className="modal-body p-4">
+                        <div className="modal-body">
                             <div className="row g-4 h-100">
                                 {/* Left Column: Uploader & Controls */}
                                 <div className="col-lg-4 d-flex flex-column">
