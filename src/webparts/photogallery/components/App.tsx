@@ -281,7 +281,7 @@ const App: React.FC = () => {
       )}
 
       <footer className="text-center text-muted py-4 mt-4">
-        <p>&copy; 2024 Image Editor Pro. All Rights Reserved.</p>
+        <p>&copy; 2025 Photo Gallery. All Rights Reserved.</p>
       </footer>
     </>
   );

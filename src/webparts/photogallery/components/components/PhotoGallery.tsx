@@ -15,7 +15,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, galleryTitle, onAdd
                 <h1 className="mb-0">
                     Gallery: <span className="text-primary">{galleryTitle}</span>
                 </h1>
-                <button className="btn btn-primary btn-lg" onClick={onAddImage}>
+                <button className="btn btn-success btn-lg" onClick={onAddImage}>
                     <i className="bi bi-plus-circle-fill me-2"></i>Add New Image
                 </button>
             </div>
@@ -30,7 +30,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, galleryTitle, onAdd
                                     <p className="card-text text-muted small">{image.description || ''}</p>
                                 </div>
                                 <div className="card-footer bg-white border-top-0 pb-3">
-                                     <button className="btn btn-outline-secondary w-100" onClick={() => onEditImage(image)}>
+                                     <button className="btn btn-success w-100" onClick={() => onEditImage(image)}>
                                         <i className="bi bi-pencil-square me-2"></i>Edit
                                     </button>
                                 </div>
